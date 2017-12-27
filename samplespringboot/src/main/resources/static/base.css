@@ -1,15 +1,39 @@
-div.navigation_area ul {
-    background: #fefefe;
-    list-style: none;
+body{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}
+div.navigation_area {
+    position: absolute;
+    background: #3f51b5;
+    width: 100%;
     margin: 0px;
     padding: 0px;
-    width: auto;
-    height: auto;
+}
+
+div.navigation_area ul {
     float: right;
 }
 
 div.navigation_area ul li {
+    list-style: none;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
     float: left;
+    color: #ffffffff;
+}
+
+div.navigation_area ul li a {
+    color: #ffffffff;
+}
+
+div.clearfloat {
+    clear: both;
+    height: 0;
+    font-size: 1px;
+    line-height: 0;
 }
 
 div.article_title {
@@ -17,8 +41,13 @@ div.article_title {
     bottom: auto;
     clear: both;
 }
-div .article_area{
+
+div .article_area {
     position: relative;
     bottom: auto;
     clear: both;
+}
+
+a {
+
 }

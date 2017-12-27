@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>freemarker测试</title>
+    <link rel="stylesheet" type="text/css" href="../static/base.css" th:href="@{/static/base.css}"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+</head>
+<body>
+<div class="navigation_area">
+    <ul>
+        <li><a href="/search">搜索</a></li>
+        <li><a href="/login" th:href="@{/static/login.html}">登录</a></li>
+        <li>|</li>
+        <li><a href="/static/register.html" th:href="@{/static/register.html}">注册</a></li>
+    </ul>
+    <div class="clearfloat"></div>
+</div>
+<div class="article_title">
+
+</div>
+<div class="article_area">
+    <h1 th:each="entry : ${map}" th:text="${entry.key}+':'+${entry.value}"></h1>
+</div>
+</body>
+</html>

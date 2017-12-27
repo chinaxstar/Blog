@@ -4,13 +4,11 @@ import cn.xstar.samplespringboot.dao.LoginTicketDao;
 import cn.xstar.samplespringboot.dao.UserDao;
 import cn.xstar.samplespringboot.pojo.LoginTicket;
 import cn.xstar.samplespringboot.pojo.User;
-import cn.xstar.samplespringboot.templates.FMTemplate;
+import cn.xstar.samplespringboot.util.Const;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.*;
 
@@ -26,18 +24,18 @@ public class LoginRestService {
         Map<String, String> map = new HashMap<>();
         Random random = new Random();
         if (StringUtils.isEmpty(username)) {
-            map.put("msg", "用户名不能为空");
+            map.put(Const.MSG, "用户名不能为空");
             return map;
         }
 
         if (StringUtils.isEmpty(password)) {
-            map.put("msg", "密码不能为空");
+            map.put(Const.MSG, "密码不能为空");
             return map;
         }
 
         User u = userDao.seletByName(username);
         if (u != null) {
-            map.put("msg", "用户名已经被占用");
+            map.put(Const.MSG, "用户名已经被占用");
             return map;
         }
 
@@ -69,6 +67,26 @@ public class LoginRestService {
         loginTicketDao.insertLoginTicket(loginTicket);
 
         return loginTicket.getTicket();
+    }
+
+    public int login(String username, String passwd) {
+        User user = userDao.seletByName(username);
+        if (StringUtils.isEmpty(username)) {
+            return Const.LOGIN_NAME_EMPTY;
+        }
+        if (StringUtils.isEmpty(username)) {
+            return Const.LOGIN_PASSWD_EMPTY;
+        }
+        if (user == null) {
+            return Const.LOGIN_NO_USER;
+        }
+        String s = passwd + user.getSalt();
+        String pwd = DigestUtils.md5DigestAsHex(s.getBytes());
+        if (user.getPassword().equals(pwd)) {
+            return user.getId();
+        } else {
+            return Const.LOGIN_WRONG_PASSSWD;
+        }
     }
 
 }

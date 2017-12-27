@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface LoginTicketDao {
     String TABLE_NAEM = " login_ticket ";
-    String INSERT_FIELDS = " user_id, ticket, expired, status ";
+    String INSERT_FIELDS = " userId, ticket, expired, status ";
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
 
     @Insert({"insert into", TABLE_NAEM, "(", INSERT_FIELDS, ") values (#{userId},#{ticket},#{expired},#{status})"})

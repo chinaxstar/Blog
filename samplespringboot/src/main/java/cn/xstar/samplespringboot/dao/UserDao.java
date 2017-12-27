@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Mapper
 public interface UserDao {
     String TABLE_NAEM = " user ";
-    String INSERT_FIELDS = " name, password, salt, head_url ,role ";
+    String INSERT_FIELDS = " name, password, salt, headUrl ,role ";
     String SELECT_FIELDS = " id, " + INSERT_FIELDS;
 
     @Insert({"insert into", TABLE_NAEM, "(", INSERT_FIELDS, ") values (#{name},#{password},#{salt},#{headUrl},#{role})"})

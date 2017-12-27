@@ -1,21 +1,19 @@
 package cn.xstar.samplespringboot;
 
-import cn.xstar.samplespringboot.templates.SampleFMTemplate;
+import cn.xstar.samplespringboot.util.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+@Controller
 public class BlogController {
 
     @Value(value = "${author.name}")
@@ -28,33 +26,57 @@ public class BlogController {
     private String sign;
 
     @Autowired
-    private SampleFMTemplate template;
+    private LoginRestService loginRestService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
 
-    @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
-    ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
-        String path = request.getServletContext().getContextPath();
-        System.out.println(path);
-        logger.error(path);
-        template.bindTemplateDic(request.getServletContext(), "/templates");
+    @RequestMapping(value = "/index", produces = "text/plain;charset=UTF-8")
+    public String index(Model model) {
+
         Map<String, Object> map = new HashMap<>();
-        ModelAndView modelAndView = new ModelAndView("test");
         map.put("name", name);
         map.put("age", age);
         map.put("level", lv);
         map.put("sign", sign);
-        modelAndView.addObject("map",map);
-        return modelAndView;
+        model.addAttribute("map", map);
+        return "index";
     }
 
     @RequestMapping(value = "/register")
-    public void register(HttpServletRequest request, HttpServletResponse response) {
-        try {
-            response.getWriter().write("Register is ok!");
-            response.getWriter().flush();
-            response.getWriter().close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public String register(Model model, @RequestParam String username, @RequestParam String passwd, @RequestParam String passwd2) {
+        if (passwd.equalsIgnoreCase(passwd2)) {
+            Map<String, String> map = loginRestService.register(username, passwd);
+            model.addAttribute(Const.MSG, map);
+            return "login";
+        } else {
+            return "密码不一致！";
         }
+    }
+
+    @RequestMapping(value = "/search", produces = "text/plain;charset=UTF-8")
+    public String search(Model model) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("age", age);
+        map.put("level", lv);
+        map.put("sign", sign);
+        model.addAttribute("map", map);
+        return "search";
+    }
+
+    @RequestMapping(value = "/login", produces = "text/plain;charset=UTF-8")
+    public String login(Model model,@RequestParam String username, @RequestParam String passwd) {
+        int code = loginRestService.login(username, passwd);
+        String str = "登陆成功";
+        switch (code) {
+            case Const.LOGIN_NAME_EMPTY:
+            case Const.LOGIN_PASSWD_EMPTY:
+            case Const.LOGIN_NO_USER:
+            case Const.LOGIN_WRONG_PASSSWD:
+                str = "登录失败！";
+                break;
+
+        }
+        model.addAttribute(Const.MSG,str);
+        return "login";
     }
 }
