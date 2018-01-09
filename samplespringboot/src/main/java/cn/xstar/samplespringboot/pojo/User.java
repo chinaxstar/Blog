@@ -1,5 +1,8 @@
 package cn.xstar.samplespringboot.pojo;
 
+/**
+ * 登录帐号
+ */
 public class User {
     private int id;
     private String name;

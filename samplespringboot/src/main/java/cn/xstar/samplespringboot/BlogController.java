@@ -1,5 +1,7 @@
 package cn.xstar.samplespringboot;
 
+import cn.xstar.samplespringboot.dao.ArticleDao;
+import cn.xstar.samplespringboot.pojo.Article;
 import cn.xstar.samplespringboot.util.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,10 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -28,16 +33,15 @@ public class BlogController {
     @Autowired
     private LoginRestService loginRestService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
+    @Autowired
+    private ArticleDao articleDao;
 
     @RequestMapping(value = "/index", produces = "text/plain;charset=UTF-8")
     public String index(Model model) {
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("age", age);
-        map.put("level", lv);
-        map.put("sign", sign);
-        model.addAttribute("map", map);
+        List<Article> articleList = articleDao.selectByLimit(0, 100);
+        model.addAttribute("map", articleList);
+
         return "index";
     }
 
@@ -64,7 +68,7 @@ public class BlogController {
     }
 
     @RequestMapping(value = "/login", produces = "text/plain;charset=UTF-8")
-    public String login(Model model,@RequestParam String username, @RequestParam String passwd) {
+    public String login(Model model, @RequestParam String username, @RequestParam String passwd) {
         int code = loginRestService.login(username, passwd);
         String str = "登陆成功";
         switch (code) {
@@ -76,7 +80,14 @@ public class BlogController {
                 break;
 
         }
-        model.addAttribute(Const.MSG,str);
+        model.addAttribute(Const.MSG, str);
         return "login";
+    }
+
+    @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
+    public String articleDetails(@PathVariable int articleId, Model model) {
+        Article article = articleDao.selectById(articleId);
+        model.addAttribute(article);
+        return "articleDetails";
     }
 }

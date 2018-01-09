@@ -2,6 +2,9 @@ package cn.xstar.samplespringboot.pojo;
 
 import java.util.Date;
 
+/**
+ * 登录票据
+ */
 public class LoginTicket {
     private int id;
     private int userId;

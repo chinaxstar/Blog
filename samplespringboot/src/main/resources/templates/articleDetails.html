@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>文章</title>
+</head>
+<body>
+<div>
+    <h1 th:text="${article.title}">标题</h1>
+    <h1 th:text="${article.authorId}">作者</h1>
+    <h1 th:text="${article.createDate}">创建时间</h1>
+    <h1 th:text="${article.keyWords}">关键字</h1>
+</div>
+<div th:text="${article.content}">
+
+</div>
+</body>
+</html>

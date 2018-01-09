@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8"/>
     <title>freemarker测试</title>
     <link rel="stylesheet" type="text/css" href="../static/base.css" th:href="@{/static/base.css}"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
@@ -19,7 +20,18 @@
 
 </div>
 <div class="article_area">
-    <h1 th:each="entry : ${map}" th:text="${entry.key}+':'+${entry.value}"></h1>
+    <table>
+        <tr>
+            <th>标题</th>
+            <th>作者</th>
+            <th>修改时间</th>
+        </tr>
+        <tr th:each="article : ${map}">
+            <td><a th:text="${article.title}?: '无'" th:href="'/article/'+${article.id}">文章标题</a></td>
+            <th th:text="${article.authorId}?:'匿名'">xstar</th>
+            <th th:text="${#dates.format(article.lastModifyDate,'yyyy-MM-dd')}?:'未知'">2017-01-01</th>
+        </tr>
+    </table>
 </div>
 </body>
 </html>

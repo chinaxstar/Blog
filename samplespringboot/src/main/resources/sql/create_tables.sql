@@ -13,3 +13,12 @@ CREATE TABLE IF NOT EXISTS login_ticket (
   expired DATE,
   ticket  VARCHAR(16)
 );
+CREATE TABLE IF NOT EXISTS article (
+  id             INTEGER AUTO_INCREMENT PRIMARY KEY,
+  authorId       INTEGER,
+  title          NVARCHAR(35),
+  keyWords       NVARCHAR(35),
+  content        TEXT(35),
+  createDate     DATE,
+  lastModifyDate DATE
+);
