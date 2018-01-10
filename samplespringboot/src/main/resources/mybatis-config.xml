@@ -10,5 +10,8 @@
         <setting name="mapUnderscoreToCamelCase" value="true"/>
         <setting name="useGeneratedKeys" value="true"/>
     </settings>
+    <!--<typeHandlers>-->
+        <!--<typeHandler handler="cn.xstar.samplespringboot.typehandler.TextTypeHandler"/>-->
+    <!--</typeHandlers>-->
 
 </configuration>

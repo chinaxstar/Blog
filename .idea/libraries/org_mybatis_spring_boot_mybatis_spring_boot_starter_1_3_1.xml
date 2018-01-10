@@ -31,6 +31,7 @@
     <SOURCES>
       <root url="jar://$USER_HOME$/.ideaLibSources/spring-boot-1.5.6.RELEASE-sources.jar!/" />
       <root url="jar://$USER_HOME$/.ideaLibSources/spring-jdbc-4.3.10.RELEASE-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.ideaLibSources/mybatis-3.4.5-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

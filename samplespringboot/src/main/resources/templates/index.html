@@ -2,34 +2,32 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>freemarker测试</title>
+    <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../static/base.css" th:href="@{/static/base.css}"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
 </head>
 <body>
 <div class="navigation_area">
     <ul>
-        <li><a href="/search">搜索</a></li>
-        <li><a href="/login" th:href="@{/static/login.html}">登录</a></li>
+        <li><a href="/search.action">搜索</a></li>
+        <li><a href="/login.action">登录</a></li>
         <li>|</li>
-        <li><a href="/static/register.html" th:href="@{/static/register.html}">注册</a></li>
+        <li><a href="/register.action">注册</a></li>
     </ul>
     <div class="clearfloat"></div>
-</div>
-<div class="article_title">
-
 </div>
 <div class="article_area">
     <table>
         <tr>
-            <th>标题</th>
-            <th>作者</th>
-            <th>修改时间</th>
+            <th class="_title">标题</th>
+            <th class="_author">作者</th>
+            <th class="_modifyDate">修改时间</th>
         </tr>
         <tr th:each="article : ${map}">
-            <td><a th:text="${article.title}?: '无'" th:href="'/article/'+${article.id}">文章标题</a></td>
-            <th th:text="${article.authorId}?:'匿名'">xstar</th>
-            <th th:text="${#dates.format(article.lastModifyDate,'yyyy-MM-dd')}?:'未知'">2017-01-01</th>
+            <td class="_title"><a th:text="${article.title}?: '无'" th:href="'/article/'+${article.id}">文章标题</a></td>
+            <th class="_author" th:text="${article.authorId}?:'匿名'">xstar</th>
+            <th class="_modifyDate" th:text="${#dates.format(article.lastModifyDate,'yyyy-MM-dd')}?:'未知'">2017-01-01
+            </th>
         </tr>
     </table>
 </div>

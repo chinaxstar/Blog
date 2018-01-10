@@ -1,3 +1,8 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+
 div.navigation_area {
     display: flex;
     background: #3f51b5;
@@ -27,13 +32,6 @@ div.clearfloat {
     line-height: 0;
 }
 
-div.article_title {
-    position: relative;
-    float: top;
-    bottom: auto;
-    clear: both;
-}
-
 div .article_area {
     position: relative;
     bottom: auto;
@@ -41,6 +39,12 @@ div .article_area {
     float: top;
 }
 
-a {
-
+div ._title {
+    width: 50%;
+}
+div ._author {
+    width: 20%;
+}
+div ._modifyDate {
+    width: 30%;
 }

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS article (
   authorId       INTEGER,
   title          NVARCHAR(35),
   keyWords       NVARCHAR(35),
-  content        TEXT(35),
+  content        LONGTEXT,
   createDate     DATE,
   lastModifyDate DATE
-);
+)ENGINE INNODB DEFAULT CHARACTER SET=UTF8;

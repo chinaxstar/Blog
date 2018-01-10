@@ -36,7 +36,7 @@ public class BlogController {
     @Autowired
     private ArticleDao articleDao;
 
-    @RequestMapping(value = "/index", produces = "text/plain;charset=UTF-8")
+    @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
     public String index(Model model) {
 
         List<Article> articleList = articleDao.selectByLimit(0, 100);
@@ -44,6 +44,7 @@ public class BlogController {
 
         return "index";
     }
+
 
     @RequestMapping(value = "/register")
     public String register(Model model, @RequestParam String username, @RequestParam String passwd, @RequestParam String passwd2) {
@@ -56,16 +57,7 @@ public class BlogController {
         }
     }
 
-    @RequestMapping(value = "/search", produces = "text/plain;charset=UTF-8")
-    public String search(Model model) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("age", age);
-        map.put("level", lv);
-        map.put("sign", sign);
-        model.addAttribute("map", map);
-        return "search";
-    }
+
 
     @RequestMapping(value = "/login", produces = "text/plain;charset=UTF-8")
     public String login(Model model, @RequestParam String username, @RequestParam String passwd) {
@@ -89,5 +81,25 @@ public class BlogController {
         Article article = articleDao.selectById(articleId);
         model.addAttribute(article);
         return "articleDetails";
+    }
+
+
+    @RequestMapping(value = "/register.action")
+    public String registerPage(){
+        return "register";
+    }
+    @RequestMapping(value = "/login.action")
+    public String loginPage(){
+        return "login";
+    }
+    @RequestMapping(value = "/search.action", produces = "text/plain;charset=UTF-8")
+    public String search(Model model) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("name", name);
+        map.put("age", age);
+        map.put("level", lv);
+        map.put("sign", sign);
+        model.addAttribute("map", map);
+        return "search";
     }
 }
