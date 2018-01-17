@@ -2,18 +2,21 @@ package cn.xstar.samplespringboot;
 
 import cn.xstar.samplespringboot.dao.ArticleDao;
 import cn.xstar.samplespringboot.pojo.Article;
+import cn.xstar.samplespringboot.pojo.Data;
+import cn.xstar.samplespringboot.pojo.User;
 import cn.xstar.samplespringboot.util.Const;
+import cn.xstar.samplespringboot.util.JacksonUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +35,8 @@ public class BlogController {
 
     @Autowired
     private LoginRestService loginRestService;
+    @Autowired
+    private IndexService indexService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
     @Autowired
     private ArticleDao articleDao;
@@ -58,22 +63,55 @@ public class BlogController {
     }
 
 
-
-    @RequestMapping(value = "/login", produces = "text/plain;charset=UTF-8")
-    public String login(Model model, @RequestParam String username, @RequestParam String passwd) {
-        int code = loginRestService.login(username, passwd);
-        String str = "登陆成功";
-        switch (code) {
-            case Const.LOGIN_NAME_EMPTY:
-            case Const.LOGIN_PASSWD_EMPTY:
-            case Const.LOGIN_NO_USER:
-            case Const.LOGIN_WRONG_PASSSWD:
-                str = "登录失败！";
-                break;
-
+    /**
+     * 检测登录
+     *
+     * @param ticket cookie中存储的登录状态票据
+     * @return
+     */
+    @RequestMapping("/login/checkstate")
+    public String checkLoginSession(@SessionAttribute String ticket) {
+        Data<User> data = new Data<>();
+        if (StringUtils.isEmpty(ticket)) {
+            data.setCode(Const.FAILURE);
+            data.setMsg("票据不存在！");
+        } else {
+            User user = indexService.checLoginState(ticket);
+            if (user != null) {
+                data.setCode(Const.SUCCESS);
+                data.setMsg("票据可用！");
+            } else {
+                data.setCode(Const.FAILURE);
+                data.setMsg("票据不存在！");
+            }
         }
-        model.addAttribute(Const.MSG, str);
-        return "login";
+        return JacksonUtil.toJson(data);
+    }
+
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public @ResponseBody String login(@RequestBody String json) throws IOException {
+        Data<User> data = new Data<>();
+        System.out.println(json);
+        JsonNode node=JacksonUtil.getMapper().readTree(json);
+        String username=node.get("username").asText("");
+        String passwd=node.get("passwd").asText("");
+        if (StringUtils.isEmpty(username)) {
+            data.setCode(Const.LOGIN_NAME_EMPTY);
+            data.setMsg("用户名不能为空！");
+        } else if (StringUtils.isEmpty(username)) {
+            data.setCode(Const.LOGIN_PASSWD_EMPTY);
+            data.setMsg("密码不能为空！");
+        } else {
+            User user = loginRestService.login(username, passwd);
+            if (user == null) {
+                data.setCode(Const.LOGIN_NO_USER);
+                data.setMsg("用户不存在！");
+            } else {
+                data.setMsg("登陆成功");
+                data.setCode(Const.SUCCESS);
+            }
+        }
+        return JacksonUtil.toJson(data);
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
@@ -85,13 +123,15 @@ public class BlogController {
 
 
     @RequestMapping(value = "/register.action")
-    public String registerPage(){
+    public String registerPage() {
         return "register";
     }
+
     @RequestMapping(value = "/login.action")
-    public String loginPage(){
+    public String loginPage() {
         return "login";
     }
+
     @RequestMapping(value = "/search.action", produces = "text/plain;charset=UTF-8")
     public String search(Model model) {
         Map<String, Object> map = new HashMap<>();

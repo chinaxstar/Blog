@@ -11,6 +11,7 @@ import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class LoginRestService {
@@ -20,6 +21,20 @@ public class LoginRestService {
     @Autowired
     private LoginTicketDao loginTicketDao;
 
+    /**
+     * 票据保存时间/毫秒
+     * 15天
+     */
+    private static final int TICKET_SAVED_TIME = 15 * 24 * 3600 * 1000;
+
+    /**
+     * 注册账户
+     * 注册时新增账户，新增登录票据
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     public Map<String, String> register(String username, String password) {
         Map<String, String> map = new HashMap<>();
         Random random = new Random();
@@ -59,7 +74,7 @@ public class LoginRestService {
         LoginTicket loginTicket = new LoginTicket();
         loginTicket.setUserId(userId);
         Date date = new Date();
-        date.setTime(date.getTime() + 1000 * 3600 * 30);
+        date.setTime(date.getTime() + TICKET_SAVED_TIME);
         loginTicket.setExpired(date);
         loginTicket.setStatus(0);
         loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-", ""));
@@ -69,24 +84,33 @@ public class LoginRestService {
         return loginTicket.getTicket();
     }
 
-    public int login(String username, String passwd) {
+    /**
+     * 更新登录票据状态
+     *
+     * @param userId
+     * @return
+     */
+    public String updateLoginTicket(int userId) {
+        LoginTicket loginTicket = loginTicketDao.seletByUserId(userId);
+        if (loginTicket == null) return addLoginTicket(userId);
+        else {
+            Date date = new Date();
+            date.setTime(date.getTime() + TICKET_SAVED_TIME);
+            loginTicket.setExpired(date);
+            loginTicketDao.updateStatus(loginTicket.getTicket(), date, 0);
+            return loginTicket.getTicket();
+        }
+    }
+
+    public User login(String username, String passwd) {
         User user = userDao.seletByName(username);
-        if (StringUtils.isEmpty(username)) {
-            return Const.LOGIN_NAME_EMPTY;
-        }
-        if (StringUtils.isEmpty(username)) {
-            return Const.LOGIN_PASSWD_EMPTY;
-        }
-        if (user == null) {
-            return Const.LOGIN_NO_USER;
-        }
         String s = passwd + user.getSalt();
         String pwd = DigestUtils.md5DigestAsHex(s.getBytes());
         if (user.getPassword().equals(pwd)) {
-            return user.getId();
-        } else {
-            return Const.LOGIN_WRONG_PASSSWD;
+            updateLoginTicket(user.getId());
+            return user;
         }
+        return null;
     }
 
 }

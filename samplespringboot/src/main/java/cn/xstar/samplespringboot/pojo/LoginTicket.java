@@ -4,6 +4,8 @@ import java.util.Date;
 
 /**
  * 登录票据
+ * 注册时添加登录票据
+ * 登录时修改票据状态和时间，前端cookie保存ticket
  */
 public class LoginTicket {
     private int id;

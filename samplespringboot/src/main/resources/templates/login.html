@@ -1,23 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <title>登录</title>
 </head>
+<script>
+    var url = "/login";
+    var http = new XMLHttpRequest;
+
+    function callback() {
+        if (http.readyState == 4) {
+            alert(http.status);
+            document.getElementById("loginstate").innerText = http.responseText
+        }
+    }
+
+    function login() {
+        var name = document.getElementsByName("username")[0].value;
+        var passwd = document.getElementsByName("passwd")[0].value;
+        var json = '{"username": "' + name + '", "passwd":"' + passwd + '"}';
+        http.onreadystatechange = callback;
+        http.open("POST", url);
+        http.setRequestHeader("Content-Type", "application/json");
+        http.send(json)
+    }
+
+
+</script>
 <body>
-<form action="/login" method="post">
+<form id="form">
     <div>
         <input type="text" name="username"/>
     </div>
     <div>
         <input type="password" name="passwd"/>
     </div>
-    <div>
-        <label th:text="${msg}">msg</label>
-    </div>
-    <div>
-        <input type="submit" name="LOGIN"/>
-    </div>
 </form>
+<div id="loginstate">
+</div>
+<div>
+    <input type="button" value="LOGIN" onclick="login()"/>
+</div>
 </body>
 </html>

@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+
 @Component
 @Repository
 @Mapper
@@ -19,11 +21,14 @@ public interface LoginTicketDao {
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where id=#{id}"})
     LoginTicket seletById(int id);
 
-    @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where ticket=#{ticket}"})
-    LoginTicket seletByTicket(String ticket);
+    @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where userId=#{userId}"})
+    LoginTicket seletByUserId(@Param("userId") int userId);
 
-    @Update({"update", TABLE_NAEM, "set status = #{status} where ticket = #{ticket}"})
-    void updateStatus(@Param("ticket") String ticket, @Param("status") int status);
+    @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where ticket=#{ticket}"})
+    LoginTicket seletByTicket(@Param("ticket") String ticket);
+
+    @Update({"update", TABLE_NAEM, "set status = #{status},expired=#{expired} where ticket = #{ticket}"})
+    void updateStatus(@Param("ticket") String ticket, @Param("expired") Date expired, @Param("status") int status);
 
     @Delete({"delete from", TABLE_NAEM, "where id=#{id}"})
     void deleteById(int id);
