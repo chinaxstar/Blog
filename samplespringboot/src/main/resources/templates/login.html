@@ -2,31 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
+    <script src="../static/js/myjs.js"></script>
+    <script src="../static/js/login.js"></script>
     <title>登录</title>
 </head>
-<script>
-    var url = "/login";
-    var http = new XMLHttpRequest;
-
-    function callback() {
-        if (http.readyState == 4) {
-            alert(http.status);
-            document.getElementById("loginstate").innerText = http.responseText
-        }
-    }
-
-    function login() {
-        var name = document.getElementsByName("username")[0].value;
-        var passwd = document.getElementsByName("passwd")[0].value;
-        var json = '{"username": "' + name + '", "passwd":"' + passwd + '"}';
-        http.onreadystatechange = callback;
-        http.open("POST", url);
-        http.setRequestHeader("Content-Type", "application/json");
-        http.send(json)
-    }
-
-
-</script>
 <body>
 <form id="form">
     <div>

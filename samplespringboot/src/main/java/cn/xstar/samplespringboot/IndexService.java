@@ -30,13 +30,14 @@ public class IndexService {
      */
     public User checLoginState(String ticket) {
         User user = null;
-        if (StringUtils.isEmpty(ticket)) {
+        if (!StringUtils.isEmpty(ticket)) {
             LoginTicket loginTicket = ticketDao.seletByTicket(ticket);
             /**
              * 当前时间小于过期时间
              */
-            if (loginTicket != null && loginTicket.getExpired().before(new Date())) {
+            if (loginTicket != null && loginTicket.getExpired().after(new Date())) {
                 user = userDao.seletById(loginTicket.getUserId());
+                user.setSalt(null);
             }
         }
         return user;

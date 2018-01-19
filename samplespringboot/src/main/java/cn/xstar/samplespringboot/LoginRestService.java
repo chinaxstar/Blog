@@ -102,12 +102,19 @@ public class LoginRestService {
         }
     }
 
+    /**
+     * 验证登录
+     *
+     * @param username
+     * @param passwd
+     * @return 账户,密码信息替换成ticket
+     */
     public User login(String username, String passwd) {
         User user = userDao.seletByName(username);
         String s = passwd + user.getSalt();
         String pwd = DigestUtils.md5DigestAsHex(s.getBytes());
         if (user.getPassword().equals(pwd)) {
-            updateLoginTicket(user.getId());
+            user.setPassword(updateLoginTicket(user.getId()));
             return user;
         }
         return null;

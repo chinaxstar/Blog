@@ -17,6 +17,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class BlogController {
      * @return
      */
     @RequestMapping("/login/checkstate")
-    public String checkLoginSession(@SessionAttribute String ticket) {
+    public @ResponseBody String checkLoginSession(@RequestBody String ticket) {
         Data<User> data = new Data<>();
         if (StringUtils.isEmpty(ticket)) {
             data.setCode(Const.FAILURE);
@@ -78,6 +79,8 @@ public class BlogController {
         } else {
             User user = indexService.checLoginState(ticket);
             if (user != null) {
+                user.setPassword(ticket);
+                data.setData(Collections.singletonList(user));
                 data.setCode(Const.SUCCESS);
                 data.setMsg("票据可用！");
             } else {
@@ -107,6 +110,7 @@ public class BlogController {
                 data.setCode(Const.LOGIN_NO_USER);
                 data.setMsg("用户不存在！");
             } else {
+                data.setData(Collections.singletonList(user));
                 data.setMsg("登陆成功");
                 data.setCode(Const.SUCCESS);
             }
