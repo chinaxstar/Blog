@@ -13,7 +13,13 @@ import org.springframework.util.StringUtils;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
-@Service
+import static cn.xstar.samplespringboot.util.Const.LOGIN_SERVICE_NAME;
+
+/**
+ * 登录相关服务
+ * 注册、登录、添加更新登录票据等
+ */
+@Service(LOGIN_SERVICE_NAME)
 public class LoginRestService {
 
     @Autowired
@@ -107,7 +113,7 @@ public class LoginRestService {
      *
      * @param username
      * @param passwd
-     * @return 账户,密码信息替换成ticket
+     * @return 账户, 密码信息替换成ticket
      */
     public User login(String username, String passwd) {
         User user = userDao.seletByName(username);
@@ -118,6 +124,28 @@ public class LoginRestService {
             return user;
         }
         return null;
+    }
+
+    /**
+     * 检测票据
+     * 根据浏览器保存的ticket验证是否要重新登录
+     *
+     * @param ticket
+     * @return 账户信息
+     */
+    public User checLoginState(String ticket) {
+        User user = null;
+        if (!StringUtils.isEmpty(ticket)) {
+            LoginTicket loginTicket = loginTicketDao.seletByTicket(ticket);
+            /**
+             * 当前时间小于过期时间
+             */
+            if (loginTicket != null && loginTicket.getExpired().after(new Date())) {
+                user = userDao.seletById(loginTicket.getUserId());
+                user.setSalt(null);
+            }
+        }
+        return user;
     }
 
 }

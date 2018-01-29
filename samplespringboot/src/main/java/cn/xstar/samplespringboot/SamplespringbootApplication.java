@@ -16,4 +16,6 @@ public class SamplespringbootApplication {
     public static ConfigurableApplicationContext getContext() {
         return context;
     }
+
+
 }

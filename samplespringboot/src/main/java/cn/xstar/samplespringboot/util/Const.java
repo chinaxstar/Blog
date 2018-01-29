@@ -7,6 +7,9 @@ package cn.xstar.samplespringboot.util;
  */
 public class Const {
     public static final String MSG = "msg";
+    public static final String MODEL_DATA = "data";
+    public static final String SESSION_USER = "user";
+    public static final String COOKIE_TICKET = "ticket";
 
     /**
      * 接口成功
@@ -23,5 +26,7 @@ public class Const {
     public static final int LOGIN_PASSWD_EMPTY = 2004;
     /**********************************/
     public static final int JSON_PARSE_ERROR = 3001;
+    /******************资源名称**********************/
+    public static final String LOGIN_SERVICE_NAME = "cn.xstar.samplespringboot.LoginRestService";
 
 }

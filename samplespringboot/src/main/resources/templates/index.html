@@ -5,16 +5,21 @@
     <title>首页</title>
     <link rel="stylesheet" type="text/css" href="../static/css/base.css" th:href="@{/static/css/base.css}"/>
     <script src="../static/js/myjs.js"></script>
-    <script src="../static/js/index.js"></script>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
 </head>
 <body>
 <div class="navigation_area">
-    <ul>
+    <ul th:if="${user} eq null">
         <li><a href="/search.action">搜索</a></li>
         <li><a href="/login.action">登录</a></li>
         <li>|</li>
         <li><a href="/register.action">注册</a></li>
+    </ul>
+    <ul th:unless="${user} eq null">
+        <li><a href="/search.action">搜索</a></li>
+        <li><a href="/user/1" th:href="'/user/'+${user.id}" th:text="${user.name}">用户名</a></li>
+        <li>|</li>
+        <li><a href="/logout">退出</a></li>
     </ul>
     <div class="clearfloat"></div>
 </div>

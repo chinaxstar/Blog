@@ -1,53 +1,44 @@
 package cn.xstar.samplespringboot;
 
 import cn.xstar.samplespringboot.dao.ArticleDao;
+import cn.xstar.samplespringboot.model.Loginer;
 import cn.xstar.samplespringboot.pojo.Article;
 import cn.xstar.samplespringboot.pojo.Data;
 import cn.xstar.samplespringboot.pojo.User;
 import cn.xstar.samplespringboot.util.Const;
 import cn.xstar.samplespringboot.util.JacksonUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static cn.xstar.samplespringboot.util.Const.*;
+
+@SessionAttributes(SESSION_USER)
 @Controller
 public class BlogController {
 
-    @Value(value = "${author.name}")
-    private String name;
-    @Value(value = "${author.age}")
-    private int age;
-    @Value(value = "${author.lv}")
-    private int lv;
-    @Value(value = "${author.guotations}")
-    private String sign;
-
-    @Autowired
+    @Resource(name = LOGIN_SERVICE_NAME)
     private LoginRestService loginRestService;
-    @Autowired
-    private IndexService indexService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
     @Autowired
     private ArticleDao articleDao;
 
     @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
-    public String index(Model model) {
-
+    public String index(Model model, @SessionAttribute(value = SESSION_USER, required = false) User user) {
         List<Article> articleList = articleDao.selectByLimit(0, 100);
         model.addAttribute("map", articleList);
-
+        if (user != null) model.addAttribute(SESSION_USER, user);
         return "index";
     }
 
@@ -71,13 +62,14 @@ public class BlogController {
      * @return
      */
     @RequestMapping("/login/checkstate")
-    public @ResponseBody String checkLoginSession(@RequestBody String ticket) {
+    public @ResponseBody
+    String checkLoginSession(@RequestBody String ticket) {
         Data<User> data = new Data<>();
         if (StringUtils.isEmpty(ticket)) {
             data.setCode(Const.FAILURE);
             data.setMsg("票据不存在！");
         } else {
-            User user = indexService.checLoginState(ticket);
+            User user = loginRestService.checLoginState(ticket);
             if (user != null) {
                 user.setPassword(ticket);
                 data.setData(Collections.singletonList(user));
@@ -91,13 +83,11 @@ public class BlogController {
         return JacksonUtil.toJson(data);
     }
 
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public @ResponseBody String login(@RequestBody String json) throws IOException {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(Model model, HttpServletRequest request) {
         Data<User> data = new Data<>();
-        System.out.println(json);
-        JsonNode node=JacksonUtil.getMapper().readTree(json);
-        String username=node.get("username").asText("");
-        String passwd=node.get("passwd").asText("");
+        String username = request.getParameter("username");
+        String passwd = request.getParameter("passwd");
         if (StringUtils.isEmpty(username)) {
             data.setCode(Const.LOGIN_NAME_EMPTY);
             data.setMsg("用户名不能为空！");
@@ -113,9 +103,12 @@ public class BlogController {
                 data.setData(Collections.singletonList(user));
                 data.setMsg("登陆成功");
                 data.setCode(Const.SUCCESS);
+                model.addAttribute(SESSION_USER, user);
+                request.getSession().setAttribute(SESSION_USER, user);
             }
         }
-        return JacksonUtil.toJson(data);
+        model.addAttribute(MODEL_DATA, data);
+        return "redirect:/";
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
@@ -139,11 +132,16 @@ public class BlogController {
     @RequestMapping(value = "/search.action", produces = "text/plain;charset=UTF-8")
     public String search(Model model) {
         Map<String, Object> map = new HashMap<>();
-        map.put("name", name);
-        map.put("age", age);
-        map.put("level", lv);
-        map.put("sign", sign);
         model.addAttribute("map", map);
         return "search";
+    }
+
+    @RequestMapping(value = "/user/{id}")
+    public String userDetail(Model model, @PathVariable int id, @SessionAttribute(name = SESSION_USER, required = false) User user) {
+        if (user == null) return "login";
+        else {
+            model.addAttribute(SESSION_USER, user);
+            return "user";
+        }
     }
 }

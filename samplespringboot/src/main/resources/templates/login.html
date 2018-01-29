@@ -7,18 +7,18 @@
     <title>登录</title>
 </head>
 <body>
-<form id="form">
+<form id="form" method="post" action="/login">
     <div>
         <input type="text" name="username"/>
     </div>
     <div>
         <input type="password" name="passwd"/>
     </div>
+    <div>
+        <input type="submit" value="LOGIN"/>
+    </div>
 </form>
 <div id="loginstate">
-</div>
-<div>
-    <input type="button" value="LOGIN" onclick="login()"/>
 </div>
 </body>
 </html>

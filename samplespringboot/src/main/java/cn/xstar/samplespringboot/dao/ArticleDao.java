@@ -24,6 +24,9 @@ public interface ArticleDao {
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where authorId=#{authorId}"})
     List<Article> selectByAuthor(int id);
 
+    @Select({"select", "count(id)", "from", TABLE_NAME, "where authorId=#{authorId}"})
+    int authorArticleCounts(int id);
+
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where keyWords like #{keyWords}"})
     List<Article> selectByKeywords(String keywords);
 
