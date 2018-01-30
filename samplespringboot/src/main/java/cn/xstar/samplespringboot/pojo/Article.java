@@ -11,9 +11,10 @@ public class Article {
      */
     private int id;
     /**
-     * 作者id
+     * 作者
      */
-    private int authorId;
+
+    private User author;
     /**
      * 标题
      */
@@ -44,12 +45,12 @@ public class Article {
         this.id = id;
     }
 
-    public int getAuthorId() {
-        return authorId;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getTitle() {

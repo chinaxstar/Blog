@@ -1,15 +1,16 @@
 package cn.xstar.samplespringboot;
 
-import cn.xstar.samplespringboot.dao.ArticleDao;
-import cn.xstar.samplespringboot.model.Loginer;
 import cn.xstar.samplespringboot.pojo.Article;
 import cn.xstar.samplespringboot.pojo.Data;
 import cn.xstar.samplespringboot.pojo.User;
 import cn.xstar.samplespringboot.util.Const;
+import cn.xstar.samplespringboot.util.CookieUtil;
 import cn.xstar.samplespringboot.util.JacksonUtil;
+import cn.xstar.samplespringboot.util.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -17,8 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,18 +33,20 @@ public class BlogController {
     private LoginRestService loginRestService;
     Logger logger = LoggerFactory.getLogger(BlogController.class);
     @Autowired
-    private ArticleDao articleDao;
+    private ArticleRestService articleRestService;
+    @Value(value = "${work.config.logincookieage}")
+    public int logincookieage;
 
     @RequestMapping(value = "/", produces = "text/plain;charset=UTF-8")
     public String index(Model model, @SessionAttribute(value = SESSION_USER, required = false) User user) {
-        List<Article> articleList = articleDao.selectByLimit(0, 100);
+        List<Article> articleList = articleRestService.getIndexArticle();
         model.addAttribute("map", articleList);
         if (user != null) model.addAttribute(SESSION_USER, user);
         return "index";
     }
 
 
-    @RequestMapping(value = "/register")
+    @RequestMapping(value = "/register/verify")
     public String register(Model model, @RequestParam String username, @RequestParam String passwd, @RequestParam String passwd2) {
         if (passwd.equalsIgnoreCase(passwd2)) {
             Map<String, String> map = loginRestService.register(username, passwd);
@@ -83,8 +86,8 @@ public class BlogController {
         return JacksonUtil.toJson(data);
     }
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(Model model, HttpServletRequest request) {
+    @RequestMapping(value = "/login/verify", method = RequestMethod.POST)
+    public String login(Model model, HttpServletRequest request, HttpServletResponse response) {
         Data<User> data = new Data<>();
         String username = request.getParameter("username");
         String passwd = request.getParameter("passwd");
@@ -98,41 +101,42 @@ public class BlogController {
             User user = loginRestService.login(username, passwd);
             if (user == null) {
                 data.setCode(Const.LOGIN_NO_USER);
-                data.setMsg("用户不存在！");
+                data.setMsg("用户名或密码不正确！");
             } else {
                 data.setData(Collections.singletonList(user));
                 data.setMsg("登陆成功");
                 data.setCode(Const.SUCCESS);
                 model.addAttribute(SESSION_USER, user);
                 request.getSession().setAttribute(SESSION_USER, user);
+                CookieUtil.addCookie(response, COOKIE_TICKET, user.getPassword(), logincookieage, "/");
+                return "redirect:/";
             }
         }
         model.addAttribute(MODEL_DATA, data);
-        return "redirect:/";
+        model.addAttribute(SESSION_USER, new User(username));
+        return "login";
     }
 
     @RequestMapping(value = "/article/{articleId}", method = RequestMethod.GET)
     public String articleDetails(@PathVariable int articleId, Model model) {
-        Article article = articleDao.selectById(articleId);
+        Article article = articleRestService.getArticleById(articleId);
         model.addAttribute(article);
         return "articleDetails";
     }
 
 
-    @RequestMapping(value = "/register.action")
+    @RequestMapping(value = "/register")
     public String registerPage() {
         return "register";
     }
 
-    @RequestMapping(value = "/login.action")
+    @RequestMapping(value = "/login")
     public String loginPage() {
         return "login";
     }
 
-    @RequestMapping(value = "/search.action", produces = "text/plain;charset=UTF-8")
-    public String search(Model model) {
-        Map<String, Object> map = new HashMap<>();
-        model.addAttribute("map", map);
+    @RequestMapping(value = "/search", produces = "text/plain;charset=UTF-8")
+    public String search() {
         return "search";
     }
 
@@ -141,7 +145,17 @@ public class BlogController {
         if (user == null) return "login";
         else {
             model.addAttribute(SESSION_USER, user);
+            int count = articleRestService.getUserArticleCount(id);
+            model.addAttribute(SESSION_COUNT, count);
             return "user";
         }
+    }
+
+    @RequestMapping(value = "/logout")
+    public String logout(Model model, HttpServletRequest request, HttpServletResponse response) {
+        model.asMap().clear();
+        CookieUtil.delCookie(request, response, COOKIE_TICKET);
+        SessionUtil.clearSession(request);
+        return "redirect:/";
     }
 }

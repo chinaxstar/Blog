@@ -7,9 +7,9 @@
     <title>登录</title>
 </head>
 <body>
-<form id="form" method="post" action="/login">
+<form id="form" method="post" action="/login/verify">
     <div>
-        <input type="text" name="username"/>
+        <input type="text" name="username" th:value="${user}? ${user.name}"/>
     </div>
     <div>
         <input type="password" name="passwd"/>
@@ -18,7 +18,7 @@
         <input type="submit" value="LOGIN"/>
     </div>
 </form>
-<div id="loginstate">
+<div id="loginstate" th:if="${data} ne null" th:text="${data.msg}">
 </div>
 </body>
 </html>

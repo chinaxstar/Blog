@@ -1,0 +1,46 @@
+div .article_area {
+    position: relative;
+    bottom: auto;
+    clear: both;
+    float: top;
+    margin-top: 20px;
+}
+
+#article_item {
+    display: flex;
+    margin: 0 auto;
+    flex-direction: column;
+    width: 100%;
+    background: #e9e9e9;
+    box-shadow: 10px 10px 5px darkgrey;
+}
+
+#article_title {
+    font-size: 30px;
+    margin: 10px 5px;
+    font-family: "宋体";
+}
+
+#article_abstract {
+    font-size: 16px;
+    color: darkgray;
+    text-indent: 20px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}
+
+#article_info {
+    font-size: 14px;
+    color: darkgray;
+    padding: 10px 5px;
+}
+
+#article_keywords {
+    float: left;
+}
+
+#article_author {
+    float: right;
+}

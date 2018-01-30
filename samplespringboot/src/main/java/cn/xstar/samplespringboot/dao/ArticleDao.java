@@ -2,6 +2,7 @@ package cn.xstar.samplespringboot.dao;
 
 import cn.xstar.samplespringboot.pojo.Article;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
@@ -15,21 +16,56 @@ public interface ArticleDao {
     String INSERT_FILEDS = "authorId,title,keyWords,content,createDate,lastModifyDate";
     String SELECT_FIELDS = "id," + INSERT_FILEDS;
 
-    @Insert({"insert into", TABLE_NAME, "(", INSERT_FILEDS, ")", "values(#{authorId},#{title},#{keyWords},#{content},#{createDate},#{lastModifyDate})"})
-    void intsert(Article article);
+    @InsertProvider(type = ArticleSql.class,method = "insertByArticle")
+    void intsert(@Param("article") Article article);
 
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where id=#{id}"})
+    @Results({
+            @Result(column = "authorId", property = "author", one = @One(
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+    })
     Article selectById(int id);
 
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where authorId=#{authorId}"})
+    @Results({
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "keyWords", property = "keyWords"),
+            @Result(column = "content", property = "content"),
+            @Result(column = "createDate", property = "createDate"),
+            @Result(column = "lastModifyDate", property = "lastModifyDate"),
+            @Result(column = "authorId", property = "author", one = @One(
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+    })
     List<Article> selectByAuthor(int id);
+
 
     @Select({"select", "count(id)", "from", TABLE_NAME, "where authorId=#{authorId}"})
     int authorArticleCounts(int id);
 
+    @Results({
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "keyWords", property = "keyWords"),
+            @Result(column = "content", property = "content"),
+            @Result(column = "createDate", property = "createDate"),
+            @Result(column = "lastModifyDate", property = "lastModifyDate"),
+            @Result(column = "authorId", property = "author", one = @One(
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+    })
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where keyWords like #{keyWords}"})
     List<Article> selectByKeywords(String keywords);
 
+    @Results({
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "keyWords", property = "keyWords"),
+            @Result(column = "content", property = "content"),
+            @Result(column = "createDate", property = "createDate"),
+            @Result(column = "lastModifyDate", property = "lastModifyDate"),
+            @Result(column = "authorId", property = "author", one = @One(
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+    })
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "limit #{start},#{end}"})
     List<Article> selectByLimit(@Param("start") int start, @Param("end") int end);
 

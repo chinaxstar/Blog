@@ -9,7 +9,7 @@
     <h1 th:text="${article.title}" style="align-self: center">标题</h1>
     <div style=" display:flex;justify-content: flex-end">
         作者：
-        <div th:text="${article.authorId}" style="margin-left: 10px">xxx</div>
+        <div th:text="${article.author.name}" style="margin-left: 10px">xxx</div>
         &nbsp;&nbsp;创建时间:
         <div th:text="${article.createDate} " style="margin-left: 10px">1970-1-1</div>
     </div>

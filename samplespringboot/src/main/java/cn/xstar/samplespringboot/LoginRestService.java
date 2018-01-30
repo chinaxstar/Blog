@@ -117,11 +117,13 @@ public class LoginRestService {
      */
     public User login(String username, String passwd) {
         User user = userDao.seletByName(username);
-        String s = passwd + user.getSalt();
-        String pwd = DigestUtils.md5DigestAsHex(s.getBytes());
-        if (user.getPassword().equals(pwd)) {
-            user.setPassword(updateLoginTicket(user.getId()));
-            return user;
+        if (user != null) {
+            String s = passwd + user.getSalt();
+            String pwd = DigestUtils.md5DigestAsHex(s.getBytes());
+            if (user.getPassword().equals(pwd)) {
+                user.setPassword(updateLoginTicket(user.getId()));
+                return user;
+            }
         }
         return null;
     }
