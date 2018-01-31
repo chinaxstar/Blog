@@ -29,3 +29,7 @@ function getCookie(name) {
     initCookie();
     return cookieMap[name];
 }
+
+function href(url) {
+    location.href = url;
+}

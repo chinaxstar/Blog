@@ -1,11 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!--引入wangEditor.css-->
+    <link rel="stylesheet" type="text/css" href="../static/css/wangEditor.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/bootstrap/css/bootstrap-responsive.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../static/js/external/google-code-prettify/prettify.css"/>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.css" />
+    <link href="http://netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+    <script type="text/javascript" src="../static/js/jQuery-3.3.1.js"></script>
+    <script type="text/javascript" src="../static/js/external/jquery.hotkeys.js"></script>
+    <script type="text/javascript" src="../static/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/external/google-code-prettify/prettify.js"></script>
+    <link href="../static/js" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="../static/css/writeArticle.css"/>
+    <script type="text/javascript" src="../static/js/bootstrap-wysiwyg.js"></script>
     <meta charset="UTF-8"/>
     <title>写文章</title>
 </head>
 <body>
+<!--功能栏 如保存按钮等-->
+<div id="function_line">
+    <input type="button" value="保存" id="save"/>
+</div>
+<!--文章内容-->
+<div id="article_item">
+    <div id="article_title" class="input">
+        <div>标题</div>
+        <input type="text" id="_title"/>
+    </div>
+    <div id="article_keywords" class="input">
+        <div>关键字</div>
+        <input type="text" id="_keywords"/>
+    </div>
+    <div id="content">
 
-
+    </div>
+</div>
+<script type="text/javascript">
+    $("#content").wysiwyg();
+</script>
 </body>
 </html>

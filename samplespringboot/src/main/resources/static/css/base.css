@@ -16,6 +16,20 @@ strong {
     font-weight: 800;
 }
 
+button {
+    padding: 0.75em;
+    background: #008;
+    color: #fff;
+}
+
+button:focus {
+    outline: 0.25em solid #dd0;
+}
+
+button:hover {
+    outline: 0.25em solid #dd0;
+}
+
 div#wrapper {
     margin: 0 auto;
     padding: 0;

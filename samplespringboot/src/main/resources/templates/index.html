@@ -18,6 +18,7 @@
             <li><a href="/register">注册</a></li>
         </ul>
         <ul th:unless="${user} eq null">
+            <li><a href="/write">写博客</a></li>
             <li><a href="/search">搜索</a></li>
             <li><a href="/user/1" th:href="'/user/'+${user.id}" th:text="${user.name}">用户名</a></li>
             <li>|</li>
@@ -29,9 +30,9 @@
 
     </div>
     <div class="article_area" th:each="article : ${map}">
-        <div id="article_item">
+        <div id="article_item" th:onclick="'href(\'/article/'+${article.id}+'\')'">
             <h2 id="article_title" th:text="${article.title}?: '无'">标题要长长长长长长...</h2>
-            <p id="article_abstract" th:text="${article.content}">摘要什么的说不清楚！看全部吧2333</p>
+            <p id="article_abstract" th:text="${article.content}">摘要什么的说不清楚！看全文吧2333</p>
             <div id="article_info">
                 <span id="article_keywords">
                     关键词：

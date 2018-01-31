@@ -158,4 +158,11 @@ public class BlogController {
         SessionUtil.clearSession(request);
         return "redirect:/";
     }
+
+    @RequestMapping(value = "/write")
+    public String writeAritcle(Model model, @SessionAttribute(name = SESSION_USER, required = false) User user) {
+        if (user == null) return "login";//未登录跳转登录
+        model.addAttribute(SESSION_USER, user);
+        return "writeArticle";
+    }
 }

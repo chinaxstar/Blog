@@ -1,0 +1,73 @@
+#function_line {
+    display: flex;
+    justify-content: right;
+}
+
+#article_item {
+    width: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+}
+
+#article_title {
+    font-size: 20px;
+}
+
+#_title {
+    height: 30px;
+    border: 0px;
+    font-size: 20px;
+}
+
+#article_keywords {
+    font-size: 17px;
+}
+
+#_keywords {
+    height: 30px;
+    font-size: 17px;
+    border: 0px;
+}
+
+/*#content {*/
+/*overflow: scroll;*/
+/*width: 90%;*/
+/*height: 80%;*/
+/*min-height: 300px;*/
+/*max-height: 700px;*/
+/*}*/
+
+#content {
+    max-height: 250px;
+    height: 250px;
+    background-color: white;
+    border-collapse: separate;
+    border: 1px solid rgb(204, 204, 204);
+    padding: 4px;
+    box-sizing: content-box;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    box-shadow: rgba(0, 0, 0, 0.0745098) 0px 1px 1px 0px inset;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+    border-top-left-radius: 3px;
+    overflow: scroll;
+    outline: none;
+}
+
+.input {
+    display: flex;
+    margin: 10px;
+    width: 62.8%;
+}
+
+/*后一控件自动填满*/
+.input > div:first-child {
+    flex: none;
+    width: 100px;
+}
+
+.input > input:last-child {
+    flex: 1;
+}
