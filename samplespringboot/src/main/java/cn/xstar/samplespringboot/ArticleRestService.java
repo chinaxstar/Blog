@@ -56,4 +56,23 @@ public class ArticleRestService {
     public Article getArticleById(int id) {
         return articleDao.selectById(id);
     }
+
+    /**
+     * 添加新文章
+     *
+     * @param article
+     */
+    public Article addNewArticleOrUpdate(Article article) {
+        try {
+            if (article.getId() > 0) {
+                articleDao.update(article);
+                return article;
+            }
+            articleDao.insert(article);
+            return articleDao.getNewAddArtcle();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

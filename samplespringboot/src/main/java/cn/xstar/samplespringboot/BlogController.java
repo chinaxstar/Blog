@@ -1,5 +1,6 @@
 package cn.xstar.samplespringboot;
 
+import cn.xstar.samplespringboot.model.AddArticle;
 import cn.xstar.samplespringboot.pojo.Article;
 import cn.xstar.samplespringboot.pojo.Data;
 import cn.xstar.samplespringboot.pojo.User;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -163,6 +165,36 @@ public class BlogController {
     public String writeAritcle(Model model, @SessionAttribute(name = SESSION_USER, required = false) User user) {
         if (user == null) return "login";//未登录跳转登录
         model.addAttribute(SESSION_USER, user);
+        return "writeArticle";
+    }
+
+    @RequestMapping(value = "/addArticle", produces = "application/x-www-form-urlencoded;charset=UTF-8")
+    public String addArticle(Model model, @SessionAttribute(name = SESSION_USER, required = false) User user, AddArticle addArticle) {
+        if (addArticle.getArticleId() == 0) {
+            Article article = new Article();
+            article.setAuthor(user);
+            article.setContent(addArticle.getContent());
+            Date date = new Date();
+            article.setCreateDate(date);
+            article.setLastModifyDate(date);
+            article.setTitle(addArticle.getTitle());
+            article.setKeyWords(addArticle.getKeywords());
+            Article newone = articleRestService.addNewArticleOrUpdate(article);
+            if (newone != null) model.addAttribute(SESSION_ARTICLE, newone);
+            else model.addAttribute(MSG, "新建文章失败！");
+        } else {
+//            修改文章
+            Article modifyOne = articleRestService.getArticleById(addArticle.getArticleId());
+            if (modifyOne != null && modifyOne.getAuthor().getId() == user.getId()) {
+                modifyOne.setKeyWords(addArticle.getKeywords());
+                modifyOne.setTitle(addArticle.getTitle());
+                modifyOne.setContent(addArticle.getContent());
+                modifyOne.setLastModifyDate(new Date());
+                Article newone = articleRestService.addNewArticleOrUpdate(modifyOne);
+                if (newone != null) model.addAttribute(SESSION_ARTICLE, newone);
+                else model.addAttribute(MSG, "修改文章失败！");
+            }
+        }
         return "writeArticle";
     }
 }

@@ -1,13 +1,19 @@
+
+#btn-save {
+    font-size: 24px;
+    padding: 10px 20px;
+    margin: 10px 20px;
+}
+
 #function_line {
-    display: flex;
-    justify-content: right;
+    position: fixed;
 }
 
 #article_item {
     width: 95%;
     display: flex;
     flex-direction: column;
-    justify-items: center;
+    align-items: center;
 }
 
 #article_title {
@@ -30,17 +36,30 @@
     border: 0px;
 }
 
-/*#content {*/
-/*overflow: scroll;*/
-/*width: 90%;*/
-/*height: 80%;*/
-/*min-height: 300px;*/
-/*max-height: 700px;*/
-/*}*/
+.input {
+    display: flex;
+    margin: 10px;
+    width: 62.8%;
+}
+
+/*后一控件自动填满*/
+.input > div:first-child {
+    flex: none;
+    width: 100px;
+}
+
+.input > input:last-child {
+    flex: 1;
+}
+
+/* this CSS is not part of the widget, it is here just as an example of the demo page styling.... Don't copy this one, roll your own. One
+ * of the key things about the widget is that it allows you to do your own styling!
+ */
 
 #content {
-    max-height: 250px;
-    height: 250px;
+    min-height: 300px;
+    height: auto;
+    width: 80%;
     background-color: white;
     border-collapse: separate;
     border: 1px solid rgb(204, 204, 204);
@@ -56,18 +75,26 @@
     outline: none;
 }
 
-.input {
-    display: flex;
-    margin: 10px;
-    width: 62.8%;
+#voiceBtn {
+    width: 20px;
+    color: transparent;
+    background-color: transparent;
+    transform: scale(2.0, 2.0);
+    -webkit-transform: scale(2.0, 2.0);
+    -moz-transform: scale(2.0, 2.0);
+    border: transparent;
+    cursor: pointer;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
 
-/*后一控件自动填满*/
-.input > div:first-child {
-    flex: none;
-    width: 100px;
+div[data-role="editor-toolbar"] {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
-.input > input:last-child {
-    flex: 1;
+.dropdown-menu a {
+    cursor: pointer;
 }

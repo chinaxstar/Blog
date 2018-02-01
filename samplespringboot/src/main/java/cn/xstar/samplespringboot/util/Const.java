@@ -10,6 +10,7 @@ public class Const {
     public static final String MODEL_DATA = "data";
     public static final String SESSION_USER = "user";
     public static final String SESSION_COUNT = "count";
+    public static final String SESSION_ARTICLE = "article";
     public static final String COOKIE_TICKET = "ticket";
 
     /**

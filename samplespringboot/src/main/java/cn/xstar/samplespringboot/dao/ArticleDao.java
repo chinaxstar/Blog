@@ -16,8 +16,8 @@ public interface ArticleDao {
     String INSERT_FILEDS = "authorId,title,keyWords,content,createDate,lastModifyDate";
     String SELECT_FIELDS = "id," + INSERT_FILEDS;
 
-    @InsertProvider(type = ArticleSql.class,method = "insertByArticle")
-    void intsert(@Param("article") Article article);
+    @InsertProvider(type = ArticleSql.class, method = "insertByArticle")
+    void insert(Article article);
 
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where id=#{id}"})
     @Results({
@@ -74,4 +74,17 @@ public interface ArticleDao {
 
     @Delete({"delete from", TABLE_NAME, "where id=#{id}"})
     void delateById(int id);
+
+    @Results({
+            @Result(id = true, column = "id", property = "id"),
+            @Result(column = "title", property = "title"),
+            @Result(column = "keyWords", property = "keyWords"),
+            @Result(column = "content", property = "content"),
+            @Result(column = "createDate", property = "createDate"),
+            @Result(column = "lastModifyDate", property = "lastModifyDate"),
+            @Result(column = "authorId", property = "author", one = @One(
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+    })
+    @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "ORDER BY id DESC LIMIT 0,1"})
+    Article getNewAddArtcle();
 }
