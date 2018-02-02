@@ -169,7 +169,10 @@ public class BlogController {
     }
 
     @RequestMapping(value = "/addArticle", produces = "application/x-www-form-urlencoded;charset=UTF-8")
-    public String addArticle(Model model, @SessionAttribute(name = SESSION_USER, required = false) User user, AddArticle addArticle) {
+    public @ResponseBody
+    String addArticle(@SessionAttribute(name = SESSION_USER, required = false) User user, AddArticle addArticle) {
+        Data<Article> data = new Data<>();
+
         if (addArticle.getArticleId() == 0) {
             Article article = new Article();
             article.setAuthor(user);
@@ -180,8 +183,10 @@ public class BlogController {
             article.setTitle(addArticle.getTitle());
             article.setKeyWords(addArticle.getKeywords());
             Article newone = articleRestService.addNewArticleOrUpdate(article);
-            if (newone != null) model.addAttribute(SESSION_ARTICLE, newone);
-            else model.addAttribute(MSG, "新建文章失败！");
+            if (newone != null) {
+                data.setData(Collections.singletonList(newone));
+                data.setMsg("新建文章成功！");
+            } else data.setMsg("新建文章失败！");
         } else {
 //            修改文章
             Article modifyOne = articleRestService.getArticleById(addArticle.getArticleId());
@@ -191,10 +196,12 @@ public class BlogController {
                 modifyOne.setContent(addArticle.getContent());
                 modifyOne.setLastModifyDate(new Date());
                 Article newone = articleRestService.addNewArticleOrUpdate(modifyOne);
-                if (newone != null) model.addAttribute(SESSION_ARTICLE, newone);
-                else model.addAttribute(MSG, "修改文章失败！");
+                if (newone != null) {
+                    data.setData(Collections.singletonList(newone));
+                    data.setMsg("修改文章成功！");
+                } else data.setMsg("修改文章失败！");
             }
         }
-        return "writeArticle";
+        return JacksonUtil.toJson(data);
     }
 }

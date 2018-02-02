@@ -35,7 +35,7 @@ public interface ArticleDao {
             @Result(column = "createDate", property = "createDate"),
             @Result(column = "lastModifyDate", property = "lastModifyDate"),
             @Result(column = "authorId", property = "author", one = @One(
-                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletOpenUserById", fetchType = FetchType.EAGER))
     })
     List<Article> selectByAuthor(int id);
 
@@ -51,7 +51,7 @@ public interface ArticleDao {
             @Result(column = "createDate", property = "createDate"),
             @Result(column = "lastModifyDate", property = "lastModifyDate"),
             @Result(column = "authorId", property = "author", one = @One(
-                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletOpenUserById", fetchType = FetchType.EAGER))
     })
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "where keyWords like #{keyWords}"})
     List<Article> selectByKeywords(String keywords);
@@ -64,7 +64,7 @@ public interface ArticleDao {
             @Result(column = "createDate", property = "createDate"),
             @Result(column = "lastModifyDate", property = "lastModifyDate"),
             @Result(column = "authorId", property = "author", one = @One(
-                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletOpenUserById", fetchType = FetchType.EAGER))
     })
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "limit #{start},#{end}"})
     List<Article> selectByLimit(@Param("start") int start, @Param("end") int end);
@@ -83,7 +83,7 @@ public interface ArticleDao {
             @Result(column = "createDate", property = "createDate"),
             @Result(column = "lastModifyDate", property = "lastModifyDate"),
             @Result(column = "authorId", property = "author", one = @One(
-                    select = "cn.xstar.samplespringboot.dao.UserDao.seletById", fetchType = FetchType.EAGER))
+                    select = "cn.xstar.samplespringboot.dao.UserDao.seletOpenUserById", fetchType = FetchType.EAGER))
     })
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAME, "ORDER BY id DESC LIMIT 0,1"})
     Article getNewAddArtcle();

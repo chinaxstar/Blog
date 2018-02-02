@@ -19,6 +19,15 @@ public interface UserDao {
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where id=#{id}"})
     public User seletById(int id);
 
+    /**
+     * 查询可user的开放数据
+     *
+     * @param id
+     * @return
+     */
+    @Select({"select", "id,name,headUrl,role", "from", TABLE_NAEM, "where id=#{id}"})
+    public User seletOpenUserById(int id);
+
     @Select({"select", SELECT_FIELDS, "from", TABLE_NAEM, "where name=#{name}"})
     public User seletByName(@Param("name") String name);
 
