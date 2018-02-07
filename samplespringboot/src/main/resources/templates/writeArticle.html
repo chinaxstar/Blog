@@ -17,34 +17,9 @@
     <script src="../static/bootstrap/js/bootstrap.min.js"></script>
     <script src="../static/js/external/google-code-prettify/prettify.js"></script>
     <script src="../static/js/bootstrap-wysiwyg.js"></script>
+    <script src="../static/js/wa.js"></script>
     <script>
-        $.ajaxSetup({
-            contentType: "application/x-www-form-urlencoded; charset=utf-8"
-        });
 
-        function save() {
-            var json = {};
-            json["title"] = $("#_title").val();
-            json["keywords"] = $("#_keywords").val();
-            json["content"] = $("#content").html();
-            json["articleId"] = $("#article_id").val();
-            $.post('/addArticle', json, function (data) {
-                    var d = JSON.parse(data);
-                    alert(d.msg);
-                    if (d.data != null) {
-                        if ($("#article_id")[0]) {
-                        } else {
-                            var input = document.createElement("input");
-                            input.type = "hidden";
-                            input.id = "article_id";
-                            input.value = d.data[0].id;
-                            $("#function_line").append(input);
-                        }
-                    }
-                }
-            )
-            ;
-        }
     </script>
     <meta charset="UTF-8"/>
     <title>写文章</title>
