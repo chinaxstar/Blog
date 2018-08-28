@@ -1,72 +1,82 @@
 package cn.xstar.samplespringboot.pojo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * 登录帐号
  */
+@Entity
 public class User {
-    private int id;
-    private String name;
-    private String password;
-    private String salt;
-    private String headUrl;
-    private String role;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	private String name;
+	private String password;
+	private String salt;
+	private String headUrl;
+	private String role;
 
-    public User() {
-    }
+	public User() {
+	}
 
-    public User(String name) {
-        this.name = name;
-        this.password = "";
-        this.salt = "";
-        this.headUrl = "";
-        this.role = "User";
-    }
+	public User(String name) {
+		this.name = name;
+		this.password = "";
+		this.salt = "";
+		this.headUrl = "";
+		this.role = "User";
+	}
 
-    public int getId() {
-        return id;
-    }
+	
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getSalt() {
-        return salt;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+	public String getSalt() {
+		return salt;
+	}
 
-    public String getHeadUrl() {
-        return headUrl;
-    }
+	public void setSalt(String salt) {
+		this.salt = salt;
+	}
 
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
-    }
+	public String getHeadUrl() {
+		return headUrl;
+	}
 
-    public String getRole() {
-        return role;
-    }
+	public void setHeadUrl(String headUrl) {
+		this.headUrl = headUrl;
+	}
 
-    public void setRole(String role) {
-        this.role = role;
-    }
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 }

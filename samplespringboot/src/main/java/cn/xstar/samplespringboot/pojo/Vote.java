@@ -1,40 +1,49 @@
 package cn.xstar.samplespringboot.pojo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 /**
  * 赞
  */
+@Entity
 public class Vote {
-    private int id;
-    /**
-     * 文章id
-     */
-    private int acticleId;
-    /**
-     * 用户id
-     */
-    private int userId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	/**
+	 * 文章id
+	 */
+	private int acticleId;
+	/**
+	 * 用户id
+	 */
+	private int userId;
 
-    public int getId() {
-        return id;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public int getActicleId() {
-        return acticleId;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setActicleId(int acticleId) {
-        this.acticleId = acticleId;
-    }
+	public int getActicleId() {
+		return acticleId;
+	}
 
-    public int getUserId() {
-        return userId;
-    }
+	public void setActicleId(int acticleId) {
+		this.acticleId = acticleId;
+	}
 
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 }
