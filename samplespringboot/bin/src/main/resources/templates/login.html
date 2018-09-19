@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="../static/js/myjs.js"></script>
+    <script src="../static/js/login.js"></script>
+    <title>登录</title>
+</head>
+<body>
+<form id="form" method="post" action="/login/verify">
+    <div>
+        <input type="text" name="username" th:value="${user}? ${user.name}"/>
+    </div>
+    <div>
+        <input type="password" name="passwd"/>
+    </div>
+    <div>
+        <input type="submit" value="LOGIN"/>
+    </div>
+</form>
+<div id="loginstate" th:if="${data} ne null" th:text="${data.msg}">
+</div>
+</body>
+</html>

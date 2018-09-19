@@ -3,7 +3,7 @@ package cn.xstar.samplespringboot;
 import cn.xstar.samplespringboot.dao.ArticleRepository;
 import cn.xstar.samplespringboot.pojo.Article;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +27,7 @@ public class ArticleRestService {
 	 */
 	@Transactional
 	public List<Article> getUserArticles(int id) {
-		PageRequest pageRequest = new PageRequest(1, 100);
+		PageRequest pageRequest = PageRequest.of(0, 100);
 		// 每个人的数据量比较小不考虑分页查询
 		return articleDao.selectByAuthor(id, pageRequest);
 	}
@@ -51,8 +51,9 @@ public class ArticleRestService {
 	 */
 	@Transactional
 	public List<Article> getIndexArticle() {
-		PageRequest pageRequest = new PageRequest(1, 100);
-		return articleDao.selectByAuthor(0, pageRequest);
+		PageRequest pageRequest = PageRequest.of(0, 100);
+		Page<Article> pages = articleDao.findAll(pageRequest);
+		return pages.getContent();
 	}
 
 	/**
@@ -64,7 +65,7 @@ public class ArticleRestService {
 	@Transactional
 	public Article getArticleById(long id) {
 		//
-		return articleDao.findOne(id);
+		return articleDao.findById(id).get();
 	}
 
 	/**

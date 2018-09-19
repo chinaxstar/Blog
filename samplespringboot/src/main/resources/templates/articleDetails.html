@@ -14,7 +14,7 @@
         <div th:text="${article.createDate} " style="margin-left: 10px">1970-1-1</div>
     </div>
     <h3 th:text="${article.keyWords}">关键字</h3>
-    <div th:text="${article.content}">文章内容</div>
+    <p th:utext="${article.content}">文章内容</p>
 </div>
 </body>
 </html>

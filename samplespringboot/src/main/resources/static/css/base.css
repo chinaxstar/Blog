@@ -26,18 +26,11 @@ div#wrapper {
 
 div.navigation_area {
     display: flex;
-    /**
-    主轴方向
-     */
     flex-direction: row;
-    /**在主轴上的对齐方式**/
     justify-content: flex-end;
-    /*换行*/
     flex-wrap: wrap;
     height: 100px;
-    /*在交叉轴上的对其方式*/
     align-items: center;
-    /*多个轴线的对齐方式 一个轴线不起作用*/
     align-content: center;
 }
 
@@ -57,3 +50,6 @@ div.navigation_area ul li a {
     color: grey;
 }
 
+.linecenter{
+	align-content: center;
+}

@@ -31,4 +31,5 @@ public class JacksonUtilTests {
         json = JacksonUtil.toJson(data);
         Assert.assertEquals("{\"code\":0,\"t\":0,\"data\":[{\"id\":123,\"name\":\"123\",\"password\":\"jcashduishdqe12\",\"salt\":\"23423423\",\"role\":\"管理员\"}]}", json);
     }
+
 }

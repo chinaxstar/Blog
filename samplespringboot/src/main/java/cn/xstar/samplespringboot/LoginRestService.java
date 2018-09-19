@@ -34,7 +34,7 @@ public class LoginRestService {
 	private User findUserByName(String username) {
 		User temp = new User();
 		temp.setName(username);
-		return userDao.findOne(Example.of(temp, ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("id")));
+		return userDao.findOne(Example.of(temp, ExampleMatcher.matching().withIgnoreNullValues().withIgnorePaths("id"))).get();
 	}
 
 	/**
@@ -100,7 +100,7 @@ public class LoginRestService {
 	 * @return
 	 */
 	public String updateLoginTicket(long userId) {
-		LoginTicket loginTicket = loginTicketDao.findOne(userId);
+		LoginTicket loginTicket = loginTicketDao.findById(userId).get();
 		if (loginTicket == null)
 			return addLoginTicket(userId);
 		else {
@@ -146,7 +146,7 @@ public class LoginRestService {
 			 * 当前时间小于过期时间
 			 */
 			if (loginTicket != null && loginTicket.getExpired().after(new Date())) {
-				user = userDao.findOne(loginTicket.getUserId());
+				user = userDao.findById(loginTicket.getUserId()).get();
 				user.setSalt(null);
 			}
 		}

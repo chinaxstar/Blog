@@ -1,0 +1,59 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+body {
+    font-family: PingFangSC-Regular, Verdana, Arial, '微软雅黑', '宋体';
+    font-size: 14px;
+}
+
+strong {
+    font-family: '微软雅黑';
+    font-size: 18px;
+    color: #3f3f3f;
+    font-weight: 800;
+}
+
+div#wrapper {
+    margin: 0 auto;
+    padding: 0;
+    border: 0;
+    width: 95%;
+    text-align: left;
+}
+
+div.navigation_area {
+    display: flex;
+    /**
+    主轴方向
+     */
+    flex-direction: row;
+    /**在主轴上的对齐方式**/
+    justify-content: flex-end;
+    /*换行*/
+    flex-wrap: wrap;
+    height: 100px;
+    /*在交叉轴上的对其方式*/
+    align-items: center;
+    /*多个轴线的对齐方式 一个轴线不起作用*/
+    align-content: center;
+}
+
+div.navigation_area ul {
+    float: right;
+    display: inline-flex;
+}
+
+div.navigation_area ul li {
+    list-style: none;
+    margin: 5px 10px;
+    float: left;
+    color: grey;
+}
+
+div.navigation_area ul li a {
+    color: grey;
+}
+

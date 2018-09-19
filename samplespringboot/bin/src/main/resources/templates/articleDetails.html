@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>文章</title>
+</head>
+<body style="display: flex">
+<div style="display: flex;flex-direction: column;width: 80%; align-self:center">
+    <h1 th:text="${article.title}" style="align-self: center">标题</h1>
+    <div style=" display:flex;justify-content: flex-end">
+        作者：
+        <div th:text="${article.author.name}" style="margin-left: 10px">xxx</div>
+        &nbsp;&nbsp;创建时间:
+        <div th:text="${article.createDate} " style="margin-left: 10px">1970-1-1</div>
+    </div>
+    <h3 th:text="${article.keyWords}">关键字</h3>
+    <div th:text="${article.content}">文章内容</div>
+</div>
+</body>
+</html>
